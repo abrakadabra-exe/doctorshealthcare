@@ -1,0 +1,445 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Doctors' Health Care Ltd.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Open Sans', sans-serif; margin: 0; padding: 0; }
+
+        /* Sticky Wider Rounded Transparent Navbar */
+        .sticky-navbar {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 2rem; /* Softer, lower radius */
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            max-width: 60%;
+            width: 100%;
+        }
+
+        /* Slider */
+        .slider-container {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            max-height: 900px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 1.2s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide.prev {
+            transform: translateY(-100%);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .overlay h1 {
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+        }
+
+        .overlay p {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary { background: #FFC107; color: #0A3D62; }
+        .btn-primary:hover { background: #FFCA28; transform: translateY(-3px); }
+
+        .btn-secondary { background: white; color: #0A3D62; }
+        .btn-secondary:hover { background: #f5f5f5; transform: translateY(-3px); }
+
+        /* Slider dots */
+        .slider-dots {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 20;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #FFC107;
+            transform: scale(1.4);
+        }
+
+        /* Doctors infinite scroll - Text wrapping */
+        .doctors-container {
+            display: flex;
+            animation: scroll 50s linear infinite;
+            white-space: nowrap;
+        }
+
+        .doctors-container:hover {
+            animation-play-state: paused;
+        }
+
+        .doctor-card {
+            flex: 0 0 340px;
+            margin-right: 2rem;
+            background: white;
+            border-radius: 1rem;
+            overflow: visible;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            height: 520px;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .doctor-card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+
+        .doctor-card .content {
+            padding: 1.5rem 1.25rem 2.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .doctor-card h3, .doctor-card p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .doctor-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0A3D62;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .doctor-card p {
+            font-size: 1.15rem;
+            color: #4B5563;
+            line-height: 1.5;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Announcement accordion */
+        .announcement-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease, padding 0.6s ease;
+        }
+
+        .announcement-content.open {
+            max-height: 600px;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Sticky Navbar -->
+    <header class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
+        <nav class="sticky-navbar mx-auto flex justify-between items-center">
+            <div>
+                <img src="{% static 'images/logo.png' %}" alt="Doctors' Health Care Ltd. Logo" class="h-14">
+            </div>
+            <div class="hidden md:flex space-x-12 text-[#0A3D62] text-lg font-medium">
+                <a href="/" class="text-[#FFC107] font-bold">Home</a>
+                <a href="/about/" class="hover:text-[#FFC107] transition">About</a>
+                <a href="/services/" class="hover:text-[#FFC107] transition">Services</a>
+                <a href="/doctors/" class="hover:text-[#FFC107] transition">Doctors</a>
+                <a href="/contact/" class="hover:text-[#FFC107] transition">Contact</a>
+            </div>
+            <button class="md:hidden mobile-menu-button text-[#0A3D62] text-3xl focus:outline-none">☰</button>
+        </nav>
+        <div class="mobile-menu hidden md:hidden absolute top-full left-1/2 transform -translate-x-1/2 mt-6 w-full max-w-md">
+            <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl py-8 px-10 text-center">
+                <a href="/" class="block text-[#FFC107] py-4 text-lg font-bold">Home</a>
+                <a href="/about/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">About</a>
+                <a href="/services/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Services</a>
+                <a href="/doctors/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Doctors</a>
+                <a href="/contact/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slider Section -->
+    <section class="slider-container">
+        {% for slide in slides %}
+        <div class="slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ slide.image.url }}" alt="{{ slide.title }}">
+            <div class="overlay">
+                <h1 class="text-4xl md:text-6xl font-bold">{{ slide.title }}</h1>
+                {% if slide.subtitle %}
+                <p class="text-xl md:text-2xl max-w-3xl">{{ slide.subtitle }}</p>
+                {% endif %}
+                <div class="btn-group mt-8">
+                    <a href="/appointment/" class="btn btn-primary">Book Appointment</a>
+                    <a href="/contact/" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="slide active bg-gradient-to-br from-blue-600 to-blue-900">
+            <div class="overlay">
+                <h1 class="text-4xl md:text-6xl font-bold">Welcome to Doctors' Health Care Ltd.</h1>
+                <p class="text-xl md:text-2xl max-w-3xl">Providing compassionate and quality healthcare</p>
+                <div class="btn-group mt-8">
+                    <a href="/appointment/" class="btn btn-primary">Book Appointment</a>
+                    <a href="/contact/" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="slider-dots">
+            {% for slide in slides %}
+            <div class="dot {% if forloop.first %}active{% endif %}"></div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Announcements + Testimonials -->
+    <section class="py-16 bg-[#0A3D62] text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12">
+                {% if announcements %}
+                <div class="lg:w-2/3">
+                    <h2 class="text-4xl font-bold text-center mb-8">Latest Announcements</h2>
+                    <div class="space-y-4">
+                        {% for ann in announcements %}
+                        <div class="bg-white/10 backdrop-blur rounded-xl overflow-hidden">
+                            <div class="px-6 py-4 flex justify-between items-center cursor-pointer" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('span').classList.toggle('rotate-180')">
+                                <h3 class="text-xl font-semibold">{{ ann.title }}</h3>
+                                <span class="text-2xl transition-transform">▼</span>
+                            </div>
+                            <div class="announcement-content px-6">
+                                <p class="text-lg mb-4">{{ ann.content }}</p>
+                                {% if ann.button_text and ann.button_url %}
+                                <a href="{{ ann.button_url }}" class="inline-block px-6 py-3 bg-[#FFC107] text-[#0A3D62] font-bold rounded-lg hover:bg-[#FFCA28] transition">
+                                    {{ ann.button_text }}
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if testimonials %}
+                <div class="lg:w-2/3">
+                    <h2 class="text-4xl font-bold text-center mb-8">Patient Testimonials</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {% for testimonial in testimonials %}
+                        <div class="bg-white/10 backdrop-blur p-8 rounded-xl text-center hover:bg-white/20 transition">
+                            <div class="text-5xl text-[#FFC107] mb-4 leading-none">“</div>
+                            <p class="text-lg italic mb-6">{{ testimonial.quote }}</p>
+                            <h4 class="text-xl font-bold">{{ testimonial.author }}</h4>
+                        </div>
+                        {% empty %}
+                        <p class="text-center opacity-70 col-span-2">No testimonials yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Doctors Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-[#0A3D62] mb-12">Our Specialist Doctors</h2>
+            <div class="overflow-hidden">
+                <div class="doctors-container">
+                    {% for doctor in doctors %}
+                    <div class="doctor-card">
+                        <img src="{{ doctor.photo.url }}" alt="{{ doctor.name }}">
+                        <div class="content">
+                            <h3>{{ doctor.name }}</h3>
+                            <p>{{ doctor.specialty }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% for doctor in doctors %}
+                    <div class="doctor-card">
+                        <img src="{{ doctor.photo.url }}" alt="{{ doctor.name }}">
+                        <div class="content">
+                            <h3>{{ doctor.name }}</h3>
+                            <p>{{ doctor.specialty }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0A3D62] text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <img src="{% static 'images/logo.png' %}" alt="DHCL Logo" class="h-16 mb-4">
+                    <p class="text-blue-200">
+                        Providing compassionate and quality healthcare to the community of Sonargaon, Narayanganj.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span>+880 1711-223344</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span>Emergency: 01711-223344</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span>Sonargaon, Narayanganj<br>Dhaka Division, Bangladesh</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-blue-200">
+                        <li><a href="/" class="hover:text-[#FFC107] transition">Home</a></li>
+                        <li><a href="/about/" class="hover:text-[#FFC107] transition">About</a></li>
+                        <li><a href="/services/" class="hover:text-[#FFC107] transition">Services</a></li>
+                        <li><a href="/contact/" class="hover:text-[#FFC107] transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Opening Hours</h4>
+                    <ul class="space-y-3 text-blue-200">
+                        <li>24/7 Emergency Services</li>
+                        <li>OPD: 8:00 AM – 8:00 PM</li>
+                        <li>Friday: 9:00 AM – 2:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-blue-700 text-center text-blue-200">
+                © 2025 Doctors' Health Care Ltd. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-button')?.addEventListener('click', () => {
+            document.querySelector('.mobile-menu').classList.toggle('hidden');
+        });
+
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active', 'prev');
+                if (i === index) slide.classList.add('active');
+                else if (i === currentIndex) slide.classList.add('prev');
+            });
+
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            currentIndex = index;
+        }
+
+        if (slides.length > 0) {
+            setInterval(() => {
+                const next = (currentIndex + 1) % slides.length;
+                showSlide(next);
+            }, 6000);
+        }
+
+        dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
+    </script>
+</body>
+</html>

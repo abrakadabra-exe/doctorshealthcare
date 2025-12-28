@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Doctors' Health Care Ltd.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Open Sans', sans-serif; margin: 0; padding: 0; }
+
+        /* Sticky Wider Rounded Transparent Navbar */
+        .sticky-navbar {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 2rem; /* Softer, lower radius */
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            max-width: 60%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Sticky Navbar -->
+    <header class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
+        <nav class="sticky-navbar mx-auto flex justify-between items-center">
+            <div>
+                <img src="{% static 'images/logo.png' %}" alt="Doctors' Health Care Ltd. Logo" class="h-14">
+            </div>
+            <div class="hidden md:flex space-x-12 text-[#0A3D62] text-lg font-medium">
+                <a href="/" class="hover:text-[#FFC107] transition">Home</a>
+                <a href="/about/" class="text-[#FFC107] font-bold">About</a>
+                <a href="/services/" class="hover:text-[#FFC107] transition">Services</a>
+                <a href="/doctors/" class="hover:text-[#FFC107] transition">Doctors</a>
+                <a href="/contact/" class="hover:text-[#FFC107] transition">Contact</a>
+            </div>
+            <button class="md:hidden mobile-menu-button text-[#0A3D62] text-3xl focus:outline-none">☰</button>
+        </nav>
+        <div class="mobile-menu hidden md:hidden absolute top-full left-1/2 transform -translate-x-1/2 mt-6 w-full max-w-md">
+            <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl py-8 px-10 text-center">
+                <a href="/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Home</a>
+                <a href="/about/" class="block text-[#FFC107] py-4 text-lg font-bold">About</a>
+                <a href="/services/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Services</a>
+                <a href="/doctors/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Doctors</a>
+                <a href="/contact/" class="block text-[#0A3D62] py-4 text-lg hover:text-[#FFC107] transition font-medium">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dynamic Hero Section with Background Image -->
+    <section class="relative py-32 text-white overflow-hidden" style="background-image: url('{{ about.hero_background.url }}'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="relative max-w-6xl mx-auto px-6 text-center z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">About Doctors' Health Care Ltd.</h1>
+            <p class="text-xl md:text-2xl max-w-4xl mx-auto opacity-90">
+                Delivering compassionate, world-class healthcare to the people of Sonargaon and beyond since our founding.
+            </p>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
+    </section>
+
+    <!-- Dynamic Our Story Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <img src="{{ about.story_image.url }}" alt="Our Story" class="rounded-2xl shadow-2xl w-full object-cover h-96">
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-4xl font-bold text-[#0A3D62] mb-6">{{ about.story_title }}</h2>
+                    <div class="text-lg text-gray-700 leading-relaxed space-y-4">
+                        {{ about.story_content|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission, Vision, Values (Static for now - can be made dynamic later if needed) -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-[#0A3D62] mb-16">Our Foundation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="text-center p-10 bg-gradient-to-br from-[#FFC107]/10 to-[#FFCA28]/5 rounded-3xl hover:shadow-2xl transition-shadow border border-[#FFC107]/20">
+                    <div class="w-20 h-20 bg-[#FFC107] rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">🎯</div>
+                    <h3 class="text-2xl font-bold text-[#0A3D62] mb-4">Our Mission</h3>
+                    <p class="text-gray-700">
+                        To provide accessible, high-quality, and compassionate healthcare to every individual in our community, regardless of background.
+                    </p>
+                </div>
+                <div class="text-center p-10 bg-gradient-to-br from-[#0A3D62]/10 to-[#1e5a85]/5 rounded-3xl hover:shadow-2xl transition-shadow border border-[#0A3D62]/20">
+                    <div class="w-20 h-20 bg-[#0A3D62] rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">🌟</div>
+                    <h3 class="text-2xl font-bold text-[#0A3D62] mb-4">Our Vision</h3>
+                    <p class="text-gray-700">
+                        To be the leading healthcare institution in Narayanganj, recognized for clinical excellence, innovation, and patient trust.
+                    </p>
+                </div>
+                <div class="text-center p-10 bg-gradient-to-br from-[#FFC107]/10 to-[#FFCA28]/5 rounded-3xl hover:shadow-2xl transition-shadow border border-[#FFC107]/20">
+                    <div class="w-20 h-20 bg-[#FFC107] rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">🤝</div>
+                    <h3 class="text-2xl font-bold text-[#0A3D62] mb-4">Our Values</h3>
+                    <p class="text-gray-700">
+                        Compassion • Integrity • Excellence • Respect • Innovation
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20 bg-gray-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-[#0A3D62] mb-16">Why Patients Choose Us</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">👨‍⚕️</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">Expert Specialists</h4>
+                    <p class="text-gray-700">Highly qualified doctors across all major specialties</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">24/7 Emergency Care</h4>
+                    <p class="text-gray-700">Round-the-clock emergency services with rapid response</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">🛠️</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">Modern Facilities</h4>
+                    <p class="text-gray-700">Advanced diagnostic and treatment equipment</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">❤️</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">Patient-First Approach</h4>
+                    <p class="text-gray-700">Every decision guided by patient comfort and trust</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">💙</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">Community Focused</h4>
+                    <p class="text-gray-700">Deeply rooted in serving Sonargaon and Narayanganj</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h4 class="text-xl font-bold text-[#0A3D62] mb-3">Affordable Excellence</h4>
+                    <p class="text-gray-700">Quality care at reasonable costs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-gradient-to-r from-[#0A3D62] to-[#1e5a85] text-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">Your Health Is Our Priority</h2>
+            <p class="text-xl mb-10 opacity-90">
+                Experience the difference of truly caring healthcare.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="/appointment/" class="inline-block px-10 py-4 bg-[#FFC107] text-[#0A3D62] font-bold text-lg rounded-xl hover:bg-[#FFCA28] transition transform hover:scale-105">
+                    Book Appointment
+                </a>
+                <a href="/contact/" class="inline-block px-10 py-4 bg-white/20 backdrop-blur border-2 border-white text-white font-bold text-lg rounded-xl hover:bg-white/30 transition">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0A3D62] text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <img src="{% static 'images/logo-wht.png' %}" alt="DHCL Logo" class="h-16 mb-4">
+                    <p class="text-blue-200">
+                        Providing compassionate and quality healthcare to the community of Sonargaon, Narayanganj.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span>+880 1711-223344</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span>Emergency: 01711-223344</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span>Sonargaon, Narayanganj<br>Dhaka Division, Bangladesh</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-blue-200">
+                        <li><a href="/" class="hover:text-[#FFC107] transition">Home</a></li>
+                        <li><a href="/about/" class="hover:text-[#FFC107] transition">About</a></li>
+                        <li><a href="/services/" class="hover:text-[#FFC107] transition">Services</a></li>
+                        <li><a href="/contact/" class="hover:text-[#FFC107] transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Opening Hours</h4>
+                    <ul class="space-y-3 text-blue-200">
+                        <li>24/7 Emergency Services</li>
+                        <li>OPD: 8:00 AM – 8:00 PM</li>
+                        <li>Friday: 9:00 AM – 2:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-blue-700 text-center text-blue-200">
+                © 2025 Doctors' Health Care Ltd. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelector('.mobile-menu-button')?.addEventListener('click', () => {
+            document.querySelector('.mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
